@@ -1,0 +1,10 @@
+node_modules/
+qa/
+video/
+*.webm
+*.wav
+*.mp4
+*.log
+requirements-ledger.md
+asset-audit.md
+video-spec.md

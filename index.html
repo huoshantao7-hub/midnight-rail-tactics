@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#071b28">
+  <meta name="description" content="原创 16 位风格回合制站台战棋。电脑对战或同屏双人，争夺信号台，躲开零点列车。">
+  <title>零点列车 · 信号争夺</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-icon" aria-hidden="true">◈</span><div><strong>零点列车</strong><small>MIDNIGHT RAIL · TACTICS</small></div></div>
+      <div class="scoreboard" aria-live="polite">
+        <div class="score blue"><span>蓝队信号</span><strong id="score-blue">0</strong></div>
+        <div class="score-center"><span id="round-label">ROUND 01</span><b>8 分且领先</b></div>
+        <div class="score red"><span>红队信号</span><strong id="score-red">0</strong></div>
+      </div>
+      <div class="top-actions"><button id="sound-toggle" class="icon-btn" title="切换音效" aria-label="切换音效">♫</button><button id="help-btn" class="icon-btn" title="玩法说明" aria-label="玩法说明">?</button><button id="new-btn" class="new-btn">新对局</button></div>
+    </header>
+
+    <div class="game-layout">
+      <aside class="side left-side">
+        <section class="mission panel">
+          <div class="eyebrow">MISSION 01 / 最后的站台</div>
+          <h1>抢回三座<br><em>信号台</em></h1>
+          <p>占领中央台，每回合持续得分。留意轨道预警：列车会扫过中路。</p>
+          <div class="mission-bars"><span>北站</span><i id="signal-0"></i><span>中站</span><i id="signal-1"></i><span>南站</span><i id="signal-2"></i></div>
+        </section>
+        <section class="team-panel panel">
+          <div class="panel-head"><span>队伍名单</span><span id="team-tag">蓝队行动</span></div>
+          <div id="roster" class="roster"></div>
+        </section>
+        <div class="legend"><span><i class="legend-dot move"></i>可移动</span><span><i class="legend-dot attack"></i>可攻击</span><span><i class="legend-dot hazard"></i>列车轨道</span></div>
+      </aside>
+
+      <main class="board-panel">
+        <div class="board-header"><span><b class="live-dot"></b><span id="mode-label">电脑对战</span></span><strong id="turn-banner">蓝队 · 请选择角色</strong><span id="danger-label">轨道暂时安全</span></div>
+        <div class="canvas-frame"><canvas id="board" width="706" height="558" aria-label="九列七行战棋地图"></canvas></div>
+        <div class="board-footer"><span>点击角色选择，点击高亮格行动</span><span><kbd>1</kbd>移动 <kbd>2</kbd>攻击 <kbd>3</kbd>技能 <kbd>4</kbd>警戒 <kbd>E</kbd>结束</span></div>
+      </main>
+
+      <aside class="side right-side">
+        <section class="turn-panel panel"><span class="eyebrow">COMMAND PHASE</span><div class="turn-main"><div><span id="current-team">蓝队回合</span><strong><b id="ap-count">4</b><small>/ 4 AP</small></strong></div><div id="turn-pips" class="ap-pips"></div></div><p id="turn-hint">每个角色可移动一次、行动一次。</p></section>
+        <section class="selected-panel panel"><div class="panel-head"><span>当前角色</span><span id="selected-team" class="unit-team">BLUE</span></div><div id="selected-card" class="selected-card"></div></section>
+        <section class="command-panel panel"><div class="panel-head"><span>行动指令</span><span>消耗 AP</span></div><div class="commands"><button data-action="move"><span class="key">1</span><span><b>移动</b><small>进入可达格</small></span><em>1</em></button><button data-action="attack"><span class="key">2</span><span><b>攻击</b><small>射程内目标</small></span><em>1</em></button><button data-action="skill"><span class="key">3</span><span><b id="skill-name">职业技</b><small id="skill-desc">选择目标</small></span><em>2</em></button><button data-action="guard"><span class="key">4</span><span><b>警戒</b><small>护盾并反击</small></span><em>1</em></button></div><button id="end-turn" class="end-turn">结束回合 <span>→</span></button></section>
+        <section class="log-panel panel"><div class="panel-head"><span>战场消息</span><span class="log-led"></span></div><div id="battle-log" class="battle-log" aria-live="polite"></div></section>
+      </aside>
+    </div>
+    <footer class="site-footer"><span>原创游戏 · 无需安装 · 本机轮流对战</span><span>© 2026 午夜列车</span></footer>
+  </div>
+
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-card"><button id="close-modal" class="modal-close" aria-label="关闭弹窗">×</button><div class="modal-kicker">INSERT COIN / CHOOSE MODE</div><div class="modal-glyph" aria-hidden="true">✦ ══ ◈ ══ ✦</div><h2 id="modal-title">零点列车</h2><p id="modal-copy">一场在末班车到站前结束的复古战棋对决。三名角色、四点行动力，争夺三座会持续得分的信号台。</p><div class="mode-buttons"><button id="start-ai"><span>01</span><b>挑战电脑</b><small>单人 · 战术 AI</small></button><button id="start-duel"><span>02</span><b>同屏双人</b><small>轮流操作 · 无需联网</small></button></div><div class="modal-notes"><span>至少 8 分且领先，或击倒对手获胜</span><span>中央轨道每三回合驶过列车</span></div></div>
+  </div>
+
+  <script type="module" src="main.mjs"></script>
+</body>
+</html>
